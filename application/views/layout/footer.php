@@ -1,6 +1,6 @@
 <hr>
 <a href="https://alvikaajiprahasta.com"><p class="text-end" style="margin-right: 20px">Developed By Alvika Aji Prahasta</p></a>
-<script src="<?=base_url('assets/assets/js/main.js')?>"></>
+<script src="<?=base_url('assets/assets/js/main.js')?>"></script>
 <script src="<?=base_url('assets/assets/js/core/popper.min.js')?>"></script>
   <script src="<?=base_url('assets/assets/js/core/bootstrap.min.js')?>"></script>
   <script src="<?=base_url('assets/assets/js/plugins/perfect-scrollbar.min.js')?>"></script>

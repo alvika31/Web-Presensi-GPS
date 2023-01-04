@@ -8,7 +8,7 @@
 
                         <select name="id_pegawai" class="form-control" id="exampleFormControlSelect1">
                             <?php foreach ($nama as $nama) { ?>
-                                <option value="<?= $nama->id_pegawai ?>"><?= $nama->username ?></option>
+                                <option value="<?= $nama->id_pegawai ?>"><?= $nama->nama_lengkap ?></option>
 
                             <?php } ?>
                         </select>
@@ -16,12 +16,12 @@
             </div>
             <div class="col-md-5 col-xs-12">
                 <div class="form-group">
-                    <label for="exampleFormControlInput1" style="color:white">Bulan, Tahun Absen</label>
+                    <label for="exampleFormControlInput1" style="color:white">Bulan, Tahun Presensi</label>
                     <input type="month" name="tanggal" class="form-control" id="exampleFormControlInput1">
                 </div>
             </div>
             <div class="col-md-2 col-xs-6">
-                <input type="submit" name="filter" class="btn bg-gradient-info" value="Cari Karyawan">
+                <input type="submit" name="filter" class="btn bg-gradient-info" value="Filter Karyawan">
                 </form>
             </div>
         </div>
@@ -50,13 +50,13 @@
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No.</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tanggal</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Pegawai</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jam Absen Masuk</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jam Absen Pulang</th>
-                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Info Absen</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jam Presensi Masuk</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Jam Presensi Pulang</th>
+                                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Info Presensi</th>
                                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                                 </tr>
                                 <?php foreach ($user as $users) { ?>
-                                    <?php $tanggal = strtotime($users->tgl_absen);
+                                    <?php $tanggal = date('Y-m-d', strtotime($users->tgl_absen));
                                     $jam_pulang = $users->status_absen;
                                     $jam = $users->jam_absen;
                                     ?>
@@ -65,11 +65,8 @@
                                         <td class="align-middle">
                                             <h6 class="mb-0 text-xs"><?= $i++ ?></h6>
                                         </td>
-                                        <?php
-                                        setlocale(LC_ALL, 'id-ID', 'id_ID');
-                                        ?>
                                         <td class="align-middle">
-                                            <h6 class="mb-0 text-xs"><?= strftime('%A, %d %B %Y', $tanggal) ?></h6>
+                                            <h6 class="mb-0 text-xs"><?= tanggal_indo($tanggal, TRUE) ?></h6>
                                         </td>
                                         <td class="align-middle">
                                             <h6 class="mb-0 text-xs"><?= $users->username ?></h6>
@@ -104,11 +101,11 @@
                                             </td>
                                             <?php if ($users->status_absen == 1) { ?>
                                                 <td class="align-middle">
-                                                    <h6 class="mb-0 text-xs"><span class="badge bg-gradient-danger">Belum Absen Pulang</span></h6>
+                                                    <h6 class="mb-0 text-xs"><span class="badge bg-gradient-danger">Belum Presensi Pulang</span></h6>
                                                 </td>
                                             <?php } elseif ($users->status_absen == 2) { ?>
                                                 <td class="align-middle">
-                                                    <h6 class="mb-0 text-xs"><span class="badge bg-gradient-success">Sudah Absen </span></h6>
+                                                    <h6 class="mb-0 text-xs"><span class="badge bg-gradient-success">Sudah Presensi </span></h6>
                                                 </td>
                                         <?php }
                                         } ?>

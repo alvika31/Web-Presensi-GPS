@@ -52,7 +52,6 @@ class Absensi extends CI_Controller
 		$data = [
 
 			'title' => 'Halaman Absensi',
-			'date' => strftime('%A, %d %B %Y', now()),
 			'absen' => $this->Absensi_model->absen_harian_user($this->session->userdata('id_pegawai'))->num_rows(),
 			'pulang' => $this->Absensi_model->absen_harian_user_pulang($this->session->userdata('id_pegawai'))->num_rows(),
 			'jam' => $this->Jam_model->get_all(),
@@ -62,7 +61,7 @@ class Absensi extends CI_Controller
 			'user' => $this->Absensi_model->getUserbyIdd($id_pegawai)->result(),
 			'sudah_presensiM' => $prensiMasuk,
 			'sudah_presensiP' => $this->Absensi_model->getSudahPresensiP(),
-			'belum_presensi' => $presensiPulang,
+			'belum_presensi' => $this->Absensi_model->countBelumPresensi(),
 			'jumlah_pegawai' => $jumlahPegawai,
 			'presensi_sakit' => $this->Absensi_model->getJumlahSakit(),
 			'presensi_cuti' => $this->Absensi_model->getJumlahCuti()
@@ -168,7 +167,7 @@ class Absensi extends CI_Controller
 
 		$config['base_url'] = site_url('absensi/dataKehadiran_byUser');
 		$config['total_rows'] = $this->db->count_all('absensi');
-		$config['per_page'] = 5;
+		$config['per_page'] = 10;
 
 		$config['first_link']       = 'First';
 		$config['last_link']        = 'Last';
@@ -220,7 +219,7 @@ class Absensi extends CI_Controller
 
 		$config['base_url'] = site_url('absensi/dataKehadiran');
 		$config['total_rows'] = $this->db->count_all('absensi');
-		$config['per_page'] = 5;
+		$config['per_page'] = 10;
 
 		$config['first_link']       = 'First';
 		$config['last_link']        = 'Last';
@@ -319,6 +318,9 @@ class Absensi extends CI_Controller
 				'title' => 'Halaman Filter Data Absensi',
 				'nama' => $this->db->get('user')->result(),
 				'fil' => $this->Absensi_model->filter_username($id_pegawai, $tanggal, $vbulan)->result(),
+				'countPresensi' => $this->Absensi_model->countPresensi($id_pegawai, $tanggal, $vbulan),
+				'countSakit' => $this->Absensi_model->countSakit($id_pegawai, $tanggal, $vbulan),
+				'countCuti' => $this->Absensi_model->countCuti($id_pegawai, $tanggal, $vbulan),
 				'identitas' => $this->db->get('user')->row(),
 				'inp' => $this->input->post('tanggal'),
 				'namaselect' => $this->Absensi_model->select_name_filter($id_pegawai)->row()
@@ -377,15 +379,15 @@ class Absensi extends CI_Controller
 		if ($this->session->userdata('user_type') == "Karyawan") {
 			redirect("auth/blocked");
 		}
-
-
-
+		$bulan = date_create($this->input->post('tanggal'));
 
 		error_reporting(0); // AGAR ERROR MASALAH VERSI PHP TIDAK MUNCUL
 		$pdf = new FPDF('L', 'mm', 'A4');
 		$pdf->AddPage();
 		$pdf->SetFont('Arial', 'B', 16);
 		$pdf->Cell(0, 7, 'DAFTAR PRESENSI CV. ASIAN TEKNOLOGI INSPIRA', 0, 1, 'C');
+		$pdf->SetFont('Arial', 'B', 14);
+		$pdf->Cell(0, 7, date_format($bulan, 'F-Y'), 0, 1, 'C');
 		$pdf->Cell(10, 7, '', 0, 1);
 		$pdf->SetFont('Arial', 'B', 10);
 		$pdf->Cell(10, 6, 'No', 1, 0, 'C');
@@ -410,6 +412,62 @@ class Absensi extends CI_Controller
 		$this->db->where('absensi.id_pegawai', $id_pegawai);
 		$this->db->where('month(absensi.tgl_absen)', $vbulan);
 		$this->db->where('year(absensi.tgl_absen)', $tanggal);
+		$pegawai = $this->db->get()->result();
+
+		$i = 1;
+		foreach ($pegawai as $data) {
+			$date = $data->tgl_absen;
+			$pdf->Cell(10, 6, $i++, 1, 0, 'C');
+			$pdf->Cell(40, 6, $data->username, 1, 0);
+			$pdf->Cell(40, 6, $date, 1, 0);
+			$pdf->Cell(40, 6, $data->jam_absen, 1, 0);
+			$pdf->Cell(40, 6, $data->jam_absen_pulang, 1, 0);
+			$pdf->Cell(40, 6, $data->keterangan_absen, 1, 0);
+			$pdf->Cell(40, 6, $data->lat_absen, 1, 0);
+			$pdf->Cell(40, 6, $data->long_absen, 1, 1);
+		}
+		$pdf->Output();
+	}
+
+	function do_export_staff()
+	{
+		if ($this->session->userdata('user_type') == "Karyawan") {
+			redirect("auth/blocked");
+		}
+		$bulan = date_create($this->input->post('tanggal'));
+
+
+
+		error_reporting(0); // AGAR ERROR MASALAH VERSI PHP TIDAK MUNCUL
+		$pdf = new FPDF('L', 'mm', 'A4');
+		$pdf->AddPage();
+		$pdf->SetFont('Arial', 'B', 16);
+		$pdf->Cell(0, 7, 'DAFTAR PRESENSI CV. ASIAN TEKNOLOGI INSPIRA', 0, 1, 'C');
+		$pdf->SetFont('Arial', 'B', 14);
+		$pdf->Cell(0, 7, date_format($bulan, 'F-Y'), 0, 1, 'C');
+		$pdf->Cell(10, 7, '', 0, 1);
+		$pdf->SetFont('Arial', 'B', 10);
+		$pdf->Cell(10, 6, 'No', 1, 0, 'C');
+		$pdf->Cell(40, 6, 'Nama Pegawai', 1, 0, 'C');
+		$pdf->Cell(40, 6, 'Tanggal Absen', 1, 0, 'C');
+		$pdf->Cell(40, 6, 'Jam Datang', 1, 0, 'C');
+		$pdf->Cell(40, 6, 'Jam Pulang', 1, 0, 'C');
+		$pdf->Cell(40, 6, 'Status Kehadiran', 1, 0, 'C');
+		$pdf->Cell(40, 6, 'Latitude Maps', 1, 0, 'C');
+		$pdf->Cell(40, 6, 'Longtitude Maps', 1, 1, 'C');
+		$pdf->SetFont('Arial', '', 10);
+
+		$tanggal = $this->input->post('tanggal');
+		$vbulan = date("m", strtotime($tanggal));
+
+		$no = 0;
+
+		$this->db->select('*');
+		$this->db->from('absensi');
+		$this->db->join('user', 'absensi.id_pegawai = user.id_pegawai');
+		$this->db->where('month(absensi.tgl_absen)', $vbulan);
+		$this->db->where('year(absensi.tgl_absen)', $tanggal);
+		$this->db->order_by('user.username', 'asc');
 		$pegawai = $this->db->get()->result();
 
 		$i = 1;
