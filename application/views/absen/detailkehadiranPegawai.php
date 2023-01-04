@@ -26,12 +26,12 @@
         <div class="row" style="margin-bottom: 50px">
             <a href="<?php echo site_url('absensi/dataKehadiran') ?>" class="btn btn-danger">Back</a>
             <?php foreach ($user as $users) { ?>
-                <?php $tanggal = strtotime($users->tgl_absen); ?>
+                <?php $tanggal = date('Y-m-d', strtotime($users->tgl_absen)); ?>
                 <div class="col">
 
 
                     <div class="card p-5">
-                        <h5>Detail Absensi:</h5>
+                        <h5>Detail Presensi:</h5>
 
 
                         <p>Nama Pegawai: <?= $users->nama_lengkap ?></p>
@@ -39,7 +39,7 @@
                         <?php
                         setlocale(LC_ALL, 'id-ID', 'id_ID');
                         ?>
-                        <p>Tanggal Absen: <?= strftime('%A, %d %B %Y', $tanggal) ?></p>
+                        <p>Tanggal Presensi: <?= tanggal_indo($tanggal, true) ?></p>
                         <?php if ($users->keterangan_absen == 'Sakit') { ?>
                             <p>Waktu Datang: <span class="badge badge-pill bg-gradient-danger">Sakit</span></p>
                         <?php } elseif ($users->keterangan_absen == 'Cuti') { ?>
@@ -54,19 +54,19 @@
                             <p>Waktu Pulang: <span class="badge badge-pill bg-gradient-warning">Cuti</span></p>
                         <?php } else { ?>
                             <?php if ($users->jam_absen_pulang == '00:00:00') { ?>
-                                <p>Waktu Pulang: <span class="badge badge-pill bg-gradient-danger">Belum Absen Pulang</span></p>
+                                <p>Waktu Pulang: <span class="badge badge-pill bg-gradient-danger">Belum Presensi Pulang</span></p>
                             <?php } else { ?>
                                 <p>Waktu Pulang: <?= $users->jam_absen_pulang ?></p>
                         <?php }
                         } ?>
-                        <p>Keterangan Absen: <?= $users->keterangan_absen ?></p>
+                        <p>Keterangan Presensi: <?= $users->keterangan_absen ?></p>
 
 
                     </div>
                 </div>
                 <div class="col-12 col-md-6">
                     <div class="card p-0">
-                        <h5 class="p-4">Maps Absensi:</h5>
+                        <h5 class="p-4">Maps Presensi:</h5>
 
                         <div id="map"> </div>
                         <script>

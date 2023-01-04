@@ -14,15 +14,14 @@
                             </tr>
                             <?php $i = 1;
                             foreach ($presensi_cuti as $cuti) {
-                                $tanggal = strtotime($cuti->tgl_absen)
+                                $tanggal = date('Y-m-d', strtotime($cuti->tgl_absen));
                             ?>
 
                                 <tr>
                                     <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2 "><?= $i++ ?></td>
                                     <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2 "><?= $cuti->nama_lengkap ?></td>
-                                    <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2 "><?php setlocale(LC_ALL, 'id-ID', 'id_ID');
-                                                                                                                        ?>
-                                        <?= strftime('%A, %d %B %Y', $tanggal) ?></td>
+                                    <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2 ">
+                                        <?=tanggal_indo($tanggal, TRUE) ?></td>
                                     </td>
                                     <td class="align-middle text-xs text-uppercase font-weight-bolder ps-2 "><span class="badge bg-warning"><?= $cuti->keterangan_absen ?></span></td>
                                 </tr>

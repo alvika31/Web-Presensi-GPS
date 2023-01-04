@@ -1,5 +1,4 @@
 <main class="main-content position-relative border-radius-lg ">
-
     <div class="container-fluid py-4">
         <?php if ($this->session->userdata('user_type') == 'Admin') { ?>
             <div class="row justify-content-center mb-4">
@@ -10,9 +9,9 @@
 
                             <h6 class="text-white font-weight-bold">Sudah Presensi Masuk</h6>
                             <p><?php
-                                setlocale(LC_ALL, 'id-ID', 'id_ID');
+                                $tanggal = date('Y-m-d');
                                 ?>
-                                <?= strftime('%A, %d %B %Y') ?></p>
+                                <?= tanggal_indo($tanggal, true) ?></p>
                             <h1 class="mt-4 text-white"><?= $sudah_presensiM ?></h1>Orang
                         </div>
                     </a>
@@ -21,10 +20,8 @@
                     <a href="<?= site_url('absensi/dataPresensiPulang') ?>">
                         <div class="card bg-gradient-info text-white p-3">
                             <h6 class="text-white font-weight-bold">Sudah Presensi Pulang</h6>
-                            <p><?php
-                                setlocale(LC_ALL, 'id-ID', 'id_ID');
-                                ?>
-                                <?= strftime('%A, %d %B %Y') ?></p>
+                            <p>
+                               <?= tanggal_indo($tanggal, true) ?></p>
                             <h1 class="mt-4 text-white"><?= $sudah_presensiP ?></h1>Orang
                         </div>
                     </a>
@@ -36,7 +33,7 @@
                             <p><?php
                                 setlocale(LC_ALL, 'id-ID', 'id_ID');
                                 ?>
-                                <?= strftime('%A, %d %B %Y') ?></p>
+                               <?= tanggal_indo($tanggal, true) ?></p>
                             <h1 class="mt-4 text-white"><?= $presensi_sakit ?></h1>Orang
                         </div>
                     </a>
@@ -48,7 +45,7 @@
                             <p><?php
                                 setlocale(LC_ALL, 'id-ID', 'id_ID');
                                 ?>
-                                <?= strftime('%A, %d %B %Y') ?></p>
+                               <?= tanggal_indo($tanggal, true) ?></p>
                             <h1 class="mt-4 text-white"><?= $presensi_cuti ?></h1>Orang
                         </div>
                 </div>
@@ -59,7 +56,7 @@
                             <p><?php
                                 setlocale(LC_ALL, 'id-ID', 'id_ID');
                                 ?>
-                                <?= strftime('%A, %d %B %Y') ?></p>
+                               <?= tanggal_indo($tanggal, true) ?></p>
                             <h1 class="mt-4 text-white"><?= $belum_presensi ?></h1>Orang
                         </div>
                     </a>
@@ -75,6 +72,7 @@
                 </a>
             </div>
         <?php } ?>
+        <?php  $tanggal = date('Y-m-d');?>
         <div class="row" style="margin-bottom: 50px">
             <div class="col text-center">
                 <div class="card" style="width:100%; padding-top: 30px;padding-bottom: 30px">
@@ -82,7 +80,7 @@
                         <img src="<?= base_url() . '/upload/logo.png' ?>" class="align-top" alt="..." width="150px">
                         <h3 class="card-subtitle mb-2 text-muted mt-3">Hallo, <?= $greeting ?> <?php echo $this->session->userdata('nama_lengkap'); ?></h3>
                         <marquee>
-                            <p class="card-text">Jangan Lupa Absen Tepat Waktu ya!</p>
+                            <p class="card-text">Jangan Lupa Isi Prensensi Tepat Waktu ya!</p>
                         </marquee>
 
                     </div>
@@ -216,9 +214,9 @@
 
                 <div class="card">
                     <div class="card-header p-0 mx-3 mt-3 position-relative z-index-1">
-                        <b> Absensi</b>
+                        <b> Presensi</b>
                         <hr>
-                        <label class="display-6"><?= $date ?></label><br>
+                        <label class="display-6"> <?= tanggal_indo($tanggal, true) ?></label><br>
                         <label id="hours" class="display-6"><?= date('H') ?></label>:<label id="minutes" class="display-6"><?= date('i') ?></label>:<label id="seconds" class="display-6"><?= date('s') ?></label>
                     </div>
 
@@ -237,6 +235,7 @@
 
                         <form action="<?= site_url('absensi/absen') ?>" name="Form" onsubmit=" return validateForm()" id="my-form" method="post">
                             <?php foreach ($jam_m as $jam_m) { ?>
+                                <label for="">Keterangan Presensi:</label>
                                 <div class="input-group mb-4">
                                     <select name="keterangan_absen" class="form-control">
                                         <option value="Bekerja Di Kantor">Bekerja Di Kantor</option>
@@ -254,15 +253,15 @@
                                     <?php if ($absen) { ?>
                                         <span class="badge bg-gradient-success"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill text-white" viewBox="0 0 16 16">
                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                            </svg> Anda Sudah Absen Masuk</span> <br><br>
+                                            </svg> Anda Sudah Presensi Masuk</span> <br><br>
                                     <?php } elseif (empty($absen)) { ?>
 
                                         <span class="badge bg-gradient-warning"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-circle-fill text-white" viewBox="0 0 16 16">
                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                                            </svg> Anda Belum Absen Masuk</span> <br><br>
+                                            </svg> Anda Belum Presensi Masuk</span> <br><br>
                                     <?php } ?>
 
-                                    <button onclick="getLocation()" class="btn bg-gradient-success" id="btn-masuk" value="Absen Masuk" name="masuk" <?= ($absen == 1) ? 'disabled style="cursor:not-allowed"' : '' ?>>Absen Masuk</button>
+                                    <button onclick="getLocation()" class="btn bg-gradient-success" id="btn-masuk" value="Presensi Masuk" name="masuk" <?= ($absen == 1) ? 'disabled style="cursor:not-allowed"' : '' ?>>Presensi Masuk</button>
 
 
                                 <?php } else { ?>
@@ -271,10 +270,10 @@
                                             <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                                         </svg>
                                         <div>
-                                            Absen Masuk Belum dimulai
+                                            Presensi Masuk Belum dimulai
                                         </div>
                                     </div>
-                                    <input disabled="" type="submit" class="btn bg-gradient-success" name="masuk" value="Absen Masuk" />
+                                    <input disabled="" type="submit" class="btn bg-gradient-success" name="masuk" value="Presensi Masuk" />
 
                                 <?php } ?>
 
@@ -289,17 +288,17 @@
 
 
 
-                                    <input type="submit" id="btn-pulang" class="btn bg-gradient-danger" id="btn-pulang" name="pulang" value="Absen Pulang" <?= ($pulang) ? 'disabled style="cursor:not-allowed"' : '' ?>><br>
+                                    <input type="submit" id="btn-pulang" class="btn bg-gradient-danger" id="btn-pulang" name="pulang" value="Presensi Pulang" <?= ($pulang) ? 'disabled style="cursor:not-allowed"' : '' ?>><br>
 
                                     <?php if ($pulang) { ?>
                                         <span class="badge bg-gradient-success"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle-fill text-white" viewBox="0 0 16 16">
                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                                            </svg> Anda Sudah Absen Pulang</span>
+                                            </svg> Anda Sudah Presensi Pulang</span>
                                     <?php } elseif (empty($pulang)) { ?>
 
                                         <span class="badge bg-gradient-warning"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-exclamation-circle-fill text-white" viewBox="0 0 16 16">
                                                 <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8 4a.905.905 0 0 0-.9.995l.35 3.507a.552.552 0 0 0 1.1 0l.35-3.507A.905.905 0 0 0 8 4zm.002 6a1 1 0 1 0 0 2 1 1 0 0 0 0-2z" />
-                                            </svg> Anda Belum Absen Pulang</span>
+                                            </svg> Anda Belum Presensi Pulang</span>
                                     <?php } ?><br><br>
 
 
@@ -307,13 +306,13 @@
                                 <?php } else { ?>
 
 
-                                    <input disabled="" type="submit" class="btn bg-gradient-danger" name="pulang" value="Absen Pulang" />
+                                    <input disabled="" type="submit" class="btn bg-gradient-danger" name="pulang" value="Presensi Pulang" />
                                     <div class="alert alert-danger d-flex align-items-center text-white" role="alert">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-exclamation-triangle-fill flex-shrink-0 me-2" viewBox="0 0 16 16" role="img" aria-label="Warning:">
                                             <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                                         </svg>
                                         <div>
-                                            Absen Pulang Belum dimulai
+                                            Presensi Pulang Belum dimulai
                                         </div>
                                     </div>
 

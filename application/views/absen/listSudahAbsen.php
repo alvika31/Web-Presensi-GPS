@@ -16,7 +16,8 @@
                                 </tr>
                                 <?php $i = 1;
                                 foreach ($listPresensiMasuk as $masuk) {
-                                    $tanggal = strtotime($masuk->tgl_absen)
+                                    $tanggal = date('Y-m-d', strtotime($masuk->tgl_absen));
+                                    
 
                                 ?>
                                     <tr>
@@ -24,9 +25,9 @@
                                         <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"><?= $masuk->nama_lengkap ?></td>
                                         <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"><?php setlocale(LC_ALL, 'id-ID', 'id_ID');
                                                                                                                             ?>
-                                            <?= strftime('%A, %d %B %Y', $tanggal) ?></td>
+                                            <?= tanggal_indo($tanggal, true) ?></td>
                                         <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"><?= $masuk->jam_absen ?></td>
-                                        <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"> <a href="<?= site_url('absensi/detailKehadiranPegawai/' . $masuk->id_absen) ?>" class="btn btn-info btn-sm" style="padding: 10px" data-toggle="tooltip" data-placement="top" title="Detail Absen">
+                                        <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"> <a href="<?= site_url('absensi/detailKehadiranPegawai/' . $masuk->id_absen) ?>" class="btn btn-info btn-sm" style="padding: 10px" data-toggle="tooltip" data-placement="top" title="Detail Presensi">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">
                                                     <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z" />
                                                     <path d="M7 5.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 1 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0zM7 9.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5zm-1.496-.854a.5.5 0 0 1 0 .708l-1.5 1.5a.5.5 0 0 1-.708 0l-.5-.5a.5.5 0 0 1 .708-.708l.146.147 1.146-1.147a.5.5 0 0 1 .708 0z" />

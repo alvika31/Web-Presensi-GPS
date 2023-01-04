@@ -12,7 +12,6 @@ class Auth extends CI_Controller
 
   public function index()
   {
-
     $data = [
       'title' => 'Halaman Login'
     ];
@@ -22,21 +21,21 @@ class Auth extends CI_Controller
   function login()
   {
 
-    $username = $this->input->post('username'); // Ambil isi dari inputan username pada form login
-    $password = md5($this->input->post('password')); // Ambil isi dari inputan password pada form login dan encrypt dengan md5
-    $user = $this->Auth_model->get($username); // Panggil fungsi get yang ada di UserModel.php
-    if (empty($user)) { // Jika hasilnya kosong / user tidak ditemukan
+    $username = $this->input->post('username');
+    $password = md5($this->input->post('password'));
+    $user = $this->Auth_model->get($username);
+    if (empty($user)) {
       $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
       <span style="color:white">Username Tidak Ditemukan</span>
-     </div>'); // Buat session flashdata
-      redirect('auth'); // Redirect ke halaman login
+     </div>');
+      redirect('auth');
     } else {
-      if ($password == $user->password) { // Jika password yang diinput sama dengan password yang didatabase
+      if ($password == $user->password) {
         $session = array(
           'authenticated' => true,
           'id_pegawai' => $user->id_pegawai,
-          'nama_lengkap' => $user->nama_lengkap, // Buat session authenticated dengan value true
-          'username' => $user->username,  // Buat session username
+          'nama_lengkap' => $user->nama_lengkap,
+          'username' => $user->username,
           'user_type' => $user->user_type,
           'umur' => $user->umur,
           'image' => $user->image,
@@ -46,15 +45,15 @@ class Auth extends CI_Controller
           'tempat_lahir' => $user->tempat_lahir,
           'jenis_kelamin' => $user->jenis_kelamin,
           'status' => "login",
-          'is_login' => true // Buat session authenticated
+          'is_login' => true
         );
-        $this->session->set_userdata($session); // Buat session sesuai $session
-        redirect('dashboard'); // Redirect ke halaman welcome
+        $this->session->set_userdata($session);
+        redirect('dashboard');
       } else {
         $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
         <span style="color:white">Harap Masukan Password Yang Benar</span>
-       </div>'); // Buat session flashdata
-        redirect('auth'); // Redirect ke halaman login
+       </div>');
+        redirect('auth');
       }
     }
   }

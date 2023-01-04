@@ -8,8 +8,18 @@
     </a>
   </div>
   <hr class="horizontal dark mt-0">
-  <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+  <div class="collapse navbar-collapse h-auto  w-auto " id="sidenav-collapse-main">
     <ul class="navbar-nav">
+      <li class="nav-item bg-gradient-info text-white">
+        <a class="nav-link" href="#">
+          <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="ni ni-circle-08 text-white text-sm opacity-10"></i>
+          </div>
+          <span class="nav-link-text fw-bold ms-1 text-white"> Role Akun:
+            <?= $this->session->userdata('user_type') === 'Admin' ? 'HRD' : 'Karyawan' ?>
+          </span>
+        </a>
+      </li>
       <li class="nav-item">
         <a class="nav-link <?= ($title === 'Halaman Absensi') ? 'active' : '' ?>" href="<?= site_url('dashboard') ?>">
           <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -44,7 +54,7 @@
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="ni ni-single-copy-04 text-warning text-sm opacity-10"></i>
             </div>
-            <span class="nav-link-text ms-1">Absensi Pegawai</span>
+            <span class="nav-link-text ms-1">Presensi Pegawai</span>
           </a>
         </li>
         <li class="nav-item">

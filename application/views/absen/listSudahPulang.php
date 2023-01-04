@@ -16,15 +16,14 @@
                                 </tr>
                                 <?php $i = 1;
                                 foreach ($listPresensiPulang as $Pulang) {
-                                    $tanggal = strtotime($Pulang->tgl_absen)
+                                    $tanggal = date('Y-m-d', strtotime($Pulang->tgl_absen));
 
                                 ?>
                                     <tr>
                                         <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2 "><?= $i++ ?></td>
                                         <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"><?= $Pulang->nama_lengkap ?></td>
-                                        <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"><?php setlocale(LC_ALL, 'id-ID', 'id_ID');
-                                                                                                                            ?>
-                                            <?= strftime('%A, %d %B %Y', $tanggal) ?></td>
+                                        <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2">
+                                            <?= tanggal_indo($tanggal, true) ?></td>
                                         <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"><?= $Pulang->jam_absen_pulang ?></td>
                                         <td class="align-middle text-xs text-uppercase font-weight-bolder opacity-7 ps-2"> <a href="<?= site_url('absensi/detailKehadiranPegawai/' . $Pulang->id_absen) ?>" class="btn btn-info btn-sm" style="padding: 10px" data-toggle="tooltip" data-placement="top" title="Detail Absen">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-card-checklist" viewBox="0 0 16 16">

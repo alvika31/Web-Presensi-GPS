@@ -101,16 +101,6 @@ class Absensi_model extends CI_Model
         return $query = $this->db->get('absensi', $number, $offset)->result();
     }
 
-    function jumlah_data_absenId()
-    {
-        $this->db->select('*');
-        $this->db->from('absensi');
-        $this->db->join('user', 'absensi.id_pegawai=user.id_pegawai');
-        $this->db->where('absensi.id_pegawai', $id_pegawai);
-        $this->db->order_by('absensi.id_absen', 'DESC');
-        $result = $this->db->get()->num_rows();
-        return $result;
-    }
 
     function filter_username($id_pegawai, $tanggal, $vbulan)
     {
@@ -165,9 +155,11 @@ class Absensi_model extends CI_Model
     }
     function getSudahPresensiP()
     {
+        $keterangan = array('Cuti', 'Sakit');
         $this->db->select('*');
         $this->db->from('absensi');
         $this->db->where('status_absen', 2);
+        $this->db->where_not_in('keterangan_absen', $keterangan);
         $this->db->where('tgl_absen', date('Y-m-d'));
         $result = $this->db->get()->num_rows();
         return $result;
@@ -195,10 +187,12 @@ class Absensi_model extends CI_Model
 
     function fetchPresensiPulang()
     {
+        $keterangan = array('Cuti', 'Sakit');
         $this->db->select('*');
         $this->db->from('absensi');
         $this->db->join('user', 'absensi.id_pegawai = user.id_pegawai');
         $this->db->where('absensi.status_absen', 2);
+        $this->db->where_not_in('keterangan_absen', $keterangan);
         $this->db->where('absensi.tgl_absen', date('Y-m-d'));
         $result = $this->db->get()->result();
         return $result;
@@ -262,6 +256,58 @@ class Absensi_model extends CI_Model
         $this->db->where('absensi.keterangan_absen', 'Cuti');
         $this->db->where('absensi.tgl_absen', date('Y-m-d'));
         $result = $this->db->get()->result();
+        return $result;
+    }
+
+    function countPresensi($id_pegawai, $tanggal, $vbulan)
+    {
+        $keterangan = array('Cuti', 'Sakit');
+        $this->db->select('*');
+        $this->db->from('absensi');
+        $this->db->join('user', 'absensi.id_pegawai = user.id_pegawai');
+        $this->db->where('absensi.id_pegawai', $id_pegawai);
+        $this->db->where('month(absensi.tgl_absen)', $vbulan);
+        $this->db->where('year(absensi.tgl_absen)', $tanggal);
+        $this->db->where_not_in('absensi.keterangan_absen', $keterangan);
+        $result = $this->db->get()->num_rows();
+        return $result;
+    }
+
+    function countSakit($id_pegawai, $tanggal, $vbulan)
+    {
+        $this->db->select('*');
+        $this->db->from('absensi');
+        $this->db->join('user', 'absensi.id_pegawai = user.id_pegawai');
+        $this->db->where('absensi.id_pegawai', $id_pegawai);
+        $this->db->where('month(absensi.tgl_absen)', $vbulan);
+        $this->db->where('year(absensi.tgl_absen)', $tanggal);
+        $this->db->where_in('absensi.keterangan_absen', 'Sakit');
+        $result = $this->db->get()->num_rows();
+        return $result;
+    }
+
+    function countCuti($id_pegawai, $tanggal, $vbulan)
+    {
+        $this->db->select('*');
+        $this->db->from('absensi');
+        $this->db->join('user', 'absensi.id_pegawai = user.id_pegawai');
+        $this->db->where('absensi.id_pegawai', $id_pegawai);
+        $this->db->where('month(absensi.tgl_absen)', $vbulan);
+        $this->db->where('year(absensi.tgl_absen)', $tanggal);
+        $this->db->where_in('absensi.keterangan_absen', 'Cuti');
+        $result = $this->db->get()->num_rows();
+        return $result;
+    }
+
+    function countBelumPresensi()
+    {
+        $this->db->select('*');
+        $this->db->from('user');
+        $this->db->join('absensi', 'absensi.id_pegawai = user.id_pegawai');
+        $this->db->where('tgl_absen', date('Y-m-d'));
+        $this->db->where_not_in('absensi.id_pegawai', 'user.id_pegawai');
+
+        $result = $this->db->get()->num_rows();
         return $result;
     }
 }
